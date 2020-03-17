@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
 import MyExpansionPanel from './Filter'
 import MyTable from "./Table";
 import {makeStyles} from "@material-ui/core/styles";
+import TodoList from "./TodoList";
 
 const useStyles = makeStyles( {
     hrBoxes: {
@@ -14,11 +14,6 @@ const useStyles = makeStyles( {
         flex: "200px",
         padding: "10px",
         margin: "10px"
-    },
-
-    header: {
-        "background-color": "aquamarine",
-        height: "100px"
     },
 
     h1: {
@@ -35,38 +30,71 @@ const useStyles = makeStyles( {
 
 export default function App() {
     const classes = useStyles();
-    const [username, setUsername] = useState();
-    const [website, setWebsite] = useState();
+    const [isLoading, setLoading] = useState(true);
+    const [users,setUsers] = useState([]);
 
-    const updateDate = (username, website) => {
-        setUsername(username);
-        setWebsite(website);
+    //Промежуточный обработчик для лоадера
+    const loadIsnt = (func, data) =>{
+        setLoading(false);
+        func(data);
+    };
+
+    //филтрация списка пользователей на основе фильтра
+    const updateData = (username, website) => {
+        setLoading(true);
         fetch("https://jsonplaceholder.typicode.com/users" + (username ? "?username="+username : '') + (website ? "&website="+website : ''))
             .then(response => response.json())
             .then(data => {
-                setTimeout(setTasks, 5000, data);
+                setTimeout(loadIsnt(setUsers,data), 3000);
             });
     };
 
+    const [open, setOpen] = useState(false);
+    const [tasks, setTasks] = useState([]);
+
+    //получение задач пользователя для модального окна
+    const handleClickOpen = (userid) => {
+        setLoading(true);
+        fetch("https://jsonplaceholder.typicode.com/todos?userId=" + userid)
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(loadIsnt(setTasks,data),3000);
+            });
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setTasks([]);
+    };
+
+    //получение списка пользователей
     useEffect(()=>{
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => response.json())
             .then(data => {
-                setTimeout(setTasks, 5000, data);
-            });
+                setTimeout(loadIsnt(setUsers, data), 5000);
+            })
 
     },[]);
 
-    const [tasks,setTasks] = useState([]);
-
   return (
     <div className="App">
-      <header className={classes.header}>
-          <h1>Header</h1>
-      </header>
         <div className={classes.hrBoxes}>
-            <MyExpansionPanel className={classes.hrBox} updateDate={updateDate} />
-            <MyTable className={classes.hrBox} tasks={tasks} /*возможно не стоит передавать весь tasks, а только необходимые компоненты name, username, website, mail*//>
+            <MyExpansionPanel className={classes.hrBox}
+                              updateData={updateData}
+                              Load={isLoading}
+            />
+            <MyTable className={classes.hrBox}
+                     users={users} /*возможно не стоит передавать весь объект, а только необходимые компоненты name, username, website, mail*/
+                     handleClickOpen={handleClickOpen}
+                     Load={isLoading}
+            />
+        <TodoList open={open}
+                  handleClose={handleClose}
+                  Load={isLoading}
+                  tasks={tasks}
+        />
         </div>
     </div>
   );

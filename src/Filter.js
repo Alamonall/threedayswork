@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Button, ButtonGroup, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails,Typography} from '@material-ui/core';
+import {TextField, Button, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails,Typography} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
@@ -45,14 +45,14 @@ export default function MyExpansionPanel(props) {
                                    />
 
                         <Button  className={classes.buttons}
-                                 onClick={()=>{props.updateDate(username, website)}}
+                                 onClick={()=>{props.updateData(username, website)}}
                                  variant="contained"
                                  color="primary"
                                  >
                             Apply
                         </Button>
                         <Button className={classes.buttons}
-                                onClick={()=>{props.updateDate('', '')}}
+                                onClick={()=>{props.updateData("", "")}}
                                 variant="contained"
                                 color="secondary"
                         >

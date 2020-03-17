@@ -7,20 +7,25 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from "@material-ui/core/Button";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    progressBar: {
+        width: '100%',
+        position: "absolute"
+    }
 });
 
 export default function MyTable(props) {
     const classes = useStyles();
-    const tasks = props.tasks;
 
     return (
         <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
+            <Table className={classes.table} aria-label="simple table" >
                 <TableHead>
                     <TableRow>
                         <TableCell>Name</TableCell>
@@ -30,16 +35,19 @@ export default function MyTable(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {tasks.map(task => (
-                        <TableRow key={task.name}>
+                    {!props.Load ? props.users.map(user => (
+                        <TableRow key={user.id}>
                             <TableCell component="th" scope="row">
-                                {task.name}
+                                <Button onClick={() => {props.handleClickOpen(user.id)}} >
+                                    {user.name}
+                                </Button>
                             </TableCell>
-                            <TableCell align="right">{task.username}</TableCell>
-                            <TableCell align="right">{task.email}</TableCell>
-                            <TableCell align="right">{task.website}</TableCell>
+                            <TableCell align="right">{user.username}</TableCell>
+                            <TableCell align="right">{user.email}</TableCell>
+                            <TableCell align="right">{user.website}</TableCell>
                         </TableRow>
-                    ))}
+                    )) : <LinearProgress className={classes.progressBar}/>}}
+
                 </TableBody>
             </Table>
         </TableContainer>
