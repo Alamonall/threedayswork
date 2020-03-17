@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField, Button, ButtonGroup, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails,Typography} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -10,26 +10,18 @@ const useStyles = makeStyles(theme => ({
     },
     inputs: {
         display: "flex",
-        "flex-flow": "row wrap"
-    },
-    input: {
-        flex: "200px",
-        padding: "10px",
-        margin: "10px"
-
+        "flex-flow": "column wrap"
     },
     buttons: {
-        display: 'flex',
-        flexDirection: 'column',
         alignItems: 'right'
     },
 }));
 
-
-
-
 export default function MyExpansionPanel(props) {
     const classes = useStyles();
+
+    const [username, setUsername] = useState("");
+    const [website, setWebsite] = useState("");
 
     return (
         <ExpansionPanel /*disabled*/>
@@ -40,21 +32,36 @@ export default function MyExpansionPanel(props) {
             >
                 <Typography className={classes.heading}>Disabled Expansion Panel</Typography>
             </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <form noValidate autoComplete="off" className={classes.inputs}>
-                            <TextField className={classes.input} id="standard-basic" label="username"/>
-                            <TextField className={classes.input} id="standard-basic" label="website"/>
-                        </form>
-                        <div className={classes.buttons}>
-                            <ButtonGroup color="primary" aria-label="outlined primary button group">
-                                <Button onClick={props.onFilterClick} value={props.title} >Apply</Button>
-                                <Button>Close</Button>
-                            </ButtonGroup>
-                        </div>
-                    </Typography>
-                </ExpansionPanelDetails>
+            <ExpansionPanelDetails>
+                <Typography>
+                    <form noValidate autoComplete="off" className={classes.inputs}>
+                        <TextField className={classes.input} id="standard-basic" label="username"
+                                   value={username}
+                                   onChange={((e)=>{setUsername(e.target.value)})}
+                        />
+                        <TextField className={classes.input} id="standard-basic" label="website"
+                                   value={website}
+                                   onChange={((e)=>{setWebsite(e.target.value)})}
+                                   />
 
+                        <Button  className={classes.buttons}
+                                 onClick={()=>{props.updateDate(username, website)}}
+                                 variant="contained"
+                                 color="primary"
+                                 >
+                            Apply
+                        </Button>
+                        <Button className={classes.buttons}
+                                onClick={()=>{props.updateDate('', '')}}
+                                variant="contained"
+                                color="secondary"
+                        >
+                            Close
+                        </Button>
+                    </form>
+
+                </Typography>
+            </ExpansionPanelDetails>
         </ExpansionPanel>
     );
 }

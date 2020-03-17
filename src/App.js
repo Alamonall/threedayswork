@@ -35,19 +35,29 @@ const useStyles = makeStyles( {
 
 export default function App() {
     const classes = useStyles();
-    const [tasks,setTasks] = useState([]);
+    const [username, setUsername] = useState();
+    const [website, setWebsite] = useState();
+
+    const updateDate = (username, website) => {
+        setUsername(username);
+        setWebsite(website);
+        fetch("https://jsonplaceholder.typicode.com/users" + (username ? "?username="+username : '') + (website ? "&website="+website : ''))
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(setTasks, 5000, data);
+            });
+    };
+
     useEffect(()=>{
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => response.json())
             .then(data => {
-                setTasks(data);
+                setTimeout(setTasks, 5000, data);
             });
 
     },[]);
 
-    function handleFilterClick(evt){
-        alert(evt.target.value)
-    }
+    const [tasks,setTasks] = useState([]);
 
   return (
     <div className="App">
@@ -55,7 +65,7 @@ export default function App() {
           <h1>Header</h1>
       </header>
         <div className={classes.hrBoxes}>
-            <MyExpansionPanel className={classes.hrBox} onFilterClick={handleFilterClick}/>
+            <MyExpansionPanel className={classes.hrBox} updateDate={updateDate} />
             <MyTable className={classes.hrBox} tasks={tasks} /*возможно не стоит передавать весь tasks, а только необходимые компоненты name, username, website, mail*//>
         </div>
     </div>
