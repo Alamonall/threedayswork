@@ -31,7 +31,7 @@ const useStyles = makeStyles( {
 export default function App() {
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
-    const [users,setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
 
     //Промежуточный обработчик для лоадера
     const loadIsnt = (func, data) =>{
@@ -58,6 +58,7 @@ export default function App() {
         fetch("https://jsonplaceholder.typicode.com/todos?userId=" + userid)
             .then(response => response.json())
             .then(data => {
+                //setTimeout(loadIsnt(setTasks,data),3000);
                 setTimeout(loadIsnt(setTasks,data),3000);
             });
         setOpen(true);
@@ -70,6 +71,7 @@ export default function App() {
 
     //получение списка пользователей
     useEffect(()=>{
+        setLoading(true);
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => response.json())
             .then(data => {
@@ -90,11 +92,11 @@ export default function App() {
                      handleClickOpen={handleClickOpen}
                      Load={isLoading}
             />
-        <TodoList open={open}
-                  handleClose={handleClose}
-                  Load={isLoading}
-                  tasks={tasks}
-        />
+            <TodoList open={open}
+                      handleClose={handleClose}
+                      Load={isLoading}
+                      tasks={tasks}
+            />
         </div>
     </div>
   );

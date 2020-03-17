@@ -29,8 +29,7 @@ const useStyles = makeStyles({
 export default function TodoList(props) {
     debugger;
     const classes = useStyles();
-    const [tasks, setTasks] = useState();
-    setTasks({...props.tasks});
+    const [tasks, setTasks] = useState(props.tasks);
 
     const dataSearch = (e) =>{
         const value = e.target.value.toLowerCase();
@@ -39,8 +38,6 @@ export default function TodoList(props) {
         });
         setTasks(newTask);
     };
-
-
 
     return (
         <Dialog
@@ -51,9 +48,9 @@ export default function TodoList(props) {
             <DialogContent>
                 <TableContainer component={Paper}>
                     <div>
-                        <Button>{'Всего - ' + (!props.Load && tasks.length > 0 ? tasks.length : 0)}</Button>
-                        <Button>{'В работе - ' + (!props.Load && tasks.length > 0 ? tasks.filter(task => task.completed).length : 0)}</Button>
-                        <Button>{'Завершено - ' + (!props.Load && tasks.length > 0 ? tasks.filter(task => !task.completed).length : 0)} </Button>
+                        <Button>{'Всего - ' + (!!tasks ? tasks.length : 0)}</Button>
+                        <Button>{'В работе - ' + (!!tasks ? tasks.filter(task => task.completed).length : 0)}</Button>
+                        <Button>{'Завершено - ' + (!!tasks ? tasks.filter(task => !task.completed).length : 0)} </Button>
                     </div>
                     <form >
                         <input
