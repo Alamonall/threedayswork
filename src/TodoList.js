@@ -29,14 +29,16 @@ const useStyles = makeStyles({
 export default function TodoList(props) {
     debugger;
     const classes = useStyles();
-    const [tasks, setTasks] = useState(props.tasks);
+    //const [tasks, setTasks] = useState(props.tasks);
+
+    const tasks = props.tasks;
 
     const dataSearch = (e) =>{
         const value = e.target.value.toLowerCase();
         const newTask = tasks.filter(task=> {
             return task.title.toLowerCase().includes(value);
         });
-        setTasks(newTask);
+       // setTasks(newTask);
     };
 
     return (
