@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import MyExpansionPanel from './Filter'
 import MyTable from "./Table";
 import {makeStyles} from "@material-ui/core/styles";
@@ -59,6 +59,9 @@ export default function App() {
             });
     };
 
+
+
+    //фильтр для регистра при получении данных о пользователях
     const filterUsers = (users, username, website) => {
         const filteredUsers = users.filter(user => user.username.toLowerCase().includes((username ? username.toLowerCase() : user.username.toLowerCase()))
             && user.website.toLowerCase().includes((website ? website.toLowerCase() : user.website.toLowerCase())));
