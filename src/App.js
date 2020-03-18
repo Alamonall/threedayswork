@@ -39,14 +39,30 @@ export default function App() {
         func(data);
     };
 
+    //получение списка пользователей
+    useEffect(()=>{
+        setLoading(true);
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(loadIsnt(setUsers, data), 3000);
+            });
+    },[]);
+
     //филтрация списка пользователей на основе фильтра
     const updateData = (username, website) => {
         setLoading(true);
-        fetch("https://jsonplaceholder.typicode.com/users" + (username ? "?username="+username : '') + (website ? "&website="+website : ''))
+        fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => response.json())
             .then(data => {
-                setTimeout(loadIsnt(setUsers,data), 3000);
+                setTimeout(filterUsers(data, username, website), 3000);
             });
+    };
+
+    const filterUsers = (users, username, website) => {
+        const filteredUsers = users.filter(user => user.username.toLowerCase().includes((username ? username.toLowerCase() : user.username.toLowerCase()))
+            && user.website.toLowerCase().includes((website ? website.toLowerCase() : user.website.toLowerCase())));
+        loadIsnt(setUsers, filteredUsers);
     };
 
     const [open, setOpen] = useState(false);
@@ -68,17 +84,6 @@ export default function App() {
         setOpen(false);
         setTasks([]);
     };
-
-    //получение списка пользователей
-    useEffect(()=>{
-        setLoading(true);
-        fetch("https://jsonplaceholder.typicode.com/users")
-            .then(response => response.json())
-            .then(data => {
-                setTimeout(loadIsnt(setUsers, data), 5000);
-            })
-
-    },[]);
 
   return (
     <div className="App">
